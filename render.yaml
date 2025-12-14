@@ -1,0 +1,29 @@
+services:
+  # Web Service
+  - type: web
+    name: shramic-cms
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+    disk:
+      name: shramic-data
+      mountPath: /opt/render/project/src/instance
+      sizeGB: 1
+# Optional: If you want to add a PostgreSQL database instead of SQLite
+# databases:
+#   - name: shramic-db
+#     databaseName: shramic_cms
+#     user: shramic_user
+#     plan: free
