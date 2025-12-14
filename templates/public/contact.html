@@ -1,0 +1,134 @@
+{% extends "public/base.html" %} {% block title %}Contact Us{% endblock %} {%
+block content %}
+<style>
+  .contact-section {
+    padding: 80px 0;
+    background: var(--cream);
+  }
+  .contact-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--shadow);
+    margin-bottom: 30px;
+  }
+  .contact-info-item {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--secondary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.5rem;
+  }
+</style>
+
+<section class="contact-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h1
+        style="
+          font-family: 'Playfair Display', serif;
+          font-size: 2.5rem;
+          color: var(--primary);
+        "
+      >
+        Get In Touch
+      </h1>
+      <p class="text-muted">
+        We'd love to hear from you. Reach out to us for any inquiries.
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="contact-card">
+          <h3
+            style="font-family: 'Playfair Display', serif; margin-bottom: 30px"
+          >
+            Contact Information
+          </h3>
+
+          {% if contact_email %}
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <h5>Email</h5>
+              <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+            </div>
+          </div>
+          {% endif %} {% if contact_phone %}
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+            <div>
+              <h5>Phone</h5>
+              <a href="tel:{{ contact_phone }}">{{ contact_phone }}</a>
+            </div>
+          </div>
+          {% endif %} {% if contact_address %}
+          <div class="contact-info-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div>
+              <h5>Address</h5>
+              <p>{{ contact_address }}</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="contact-card">
+          <h3
+            style="font-family: 'Playfair Display', serif; margin-bottom: 30px"
+          >
+            Send us a Message
+          </h3>
+          <form>
+            <div class="mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Your Name"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Your Email"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" placeholder="Subject" />
+            </div>
+            <div class="mb-3">
+              <textarea
+                class="form-control"
+                rows="5"
+                placeholder="Your Message"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

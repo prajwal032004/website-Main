@@ -1,0 +1,342 @@
+{% extends "public/base.html" %} {% block title %}About Us{% endblock %} {%
+block meta_description %}Learn about Shramic Networks' mission to revolutionize
+agriculture through technology{% endblock %} {% block extra_css %}
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+    padding: 100px 0 80px;
+    text-align: center;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .story-section {
+    padding: 80px 0;
+    background: var(--white);
+  }
+
+  .story-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 50px;
+    align-items: center;
+  }
+
+  .story-image {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px var(--shadow-lg);
+  }
+
+  .story-text h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 25px;
+  }
+
+  .mission-vision {
+    padding: 80px 0;
+    background: var(--cream);
+  }
+
+  .mv-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 50px;
+  }
+
+  .mv-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px var(--shadow);
+  }
+
+  .mv-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--secondary), #d35400);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 35px;
+    margin-bottom: 25px;
+  }
+
+  .values-section {
+    padding: 80px 0;
+    background: var(--white);
+  }
+
+  .section-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 50px;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .value-card {
+    background: var(--cream);
+    padding: 35px;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .value-card:hover {
+    transform: translateY(-5px);
+    background: var(--white);
+  }
+
+  .team-section {
+    padding: 80px 0;
+    background: var(--cream);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-top: 50px;
+  }
+
+  .team-member {
+    text-align: center;
+  }
+
+  .member-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 25px;
+    border: 5px solid var(--white);
+    box-shadow: 0 10px 30px var(--shadow);
+  }
+
+  .member-name {
+    font-family: "Playfair Display", serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  .member-role {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  @media (min-width: 768px) {
+    .values-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .team-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .story-content {
+      grid-template-columns: 1fr 1fr;
+    }
+    .mv-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .values-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .team-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<header class="page-header">
+  <div class="container">
+    <h1>About Shramic Networks</h1>
+    <p>We're on a mission to transform agriculture through innovation</p>
+  </div>
+</header>
+
+<section class="story-section">
+  <div class="container">
+    <div class="story-content">
+      <div class="story-text">
+        <h2>Our Story</h2>
+        {% if story and story.content %} {{ story.content|safe }} {% else %}
+        <p>
+          Shramic Networks was born from a simple observation: while technology
+          was transforming every industry, agriculture—the backbone of our
+          economy—was being left behind.
+        </p>
+        <p>
+          In 2020, we started with a vision to bridge this gap. What began as a
+          small pilot project with 100 farmers has now grown into a movement
+          serving over 50,000 farmers across India.
+        </p>
+        {% endif %}
+      </div>
+      <div>
+        <img
+          class="story-image"
+          src="{% if story and story.image_url %}{{ story.image_url }}{% else %}https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=600&h=700&fit=crop{% endif %}"
+          alt="Our Story"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mission-vision">
+  <div class="container">
+    <div class="mv-grid">
+      <div class="mv-card">
+        <div class="mv-icon">
+          <i class="fas fa-bullseye"></i>
+        </div>
+        <h3>Our Mission</h3>
+        <p>
+          {% if mission and mission.content %} {{ mission.content|safe }} {%
+          else %} To empower every farmer with cutting-edge technology and
+          knowledge, making sustainable and profitable farming accessible to
+          all. {% endif %}
+        </p>
+      </div>
+      <div class="mv-card">
+        <div class="mv-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <h3>Our Vision</h3>
+        <p>
+          {% if vision and vision.content %} {{ vision.content|safe }} {% else
+          %} A future where technology and tradition work hand-in-hand, where
+          every farmer has the tools to succeed. {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="values-section">
+  <div class="container">
+    <h2 class="section-title">Our Core Values</h2>
+    <div class="values-grid">
+      {% if values %} {% for value in values %}
+      <div class="value-card">
+        <div
+          style="font-size: 50px; color: var(--secondary); margin-bottom: 20px"
+        >
+          <i class="{{ value.icon or 'fas fa-check-circle' }}"></i>
+        </div>
+        <h4>{{ value.title }}</h4>
+        <p>{{ value.content }}</p>
+      </div>
+      {% endfor %} {% else %}
+      <div class="value-card">
+        <div
+          style="font-size: 50px; color: var(--secondary); margin-bottom: 20px"
+        >
+          <i class="fas fa-users"></i>
+        </div>
+        <h4>Farmer-First</h4>
+        <p>
+          Every decision starts with asking: "How does this help our farmers?"
+        </p>
+      </div>
+      <div class="value-card">
+        <div
+          style="font-size: 50px; color: var(--secondary); margin-bottom: 20px"
+        >
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <h4>Innovation</h4>
+        <p>
+          We constantly push boundaries to bring the latest technology within
+          reach.
+        </p>
+      </div>
+      <div class="value-card">
+        <div
+          style="font-size: 50px; color: var(--secondary); margin-bottom: 20px"
+        >
+          <i class="fas fa-leaf"></i>
+        </div>
+        <h4>Sustainability</h4>
+        <p>
+          Profitable farming must go hand-in-hand with environmental
+          stewardship.
+        </p>
+      </div>
+      <div class="value-card">
+        <div
+          style="font-size: 50px; color: var(--secondary); margin-bottom: 20px"
+        >
+          <i class="fas fa-handshake"></i>
+        </div>
+        <h4>Integrity</h4>
+        <p>We build trust through transparency and fair practices.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if leadership or team %}
+<section class="team-section">
+  <div class="container">
+    {% if leadership %}
+    <h2 class="section-title">Meet Our Leadership</h2>
+    <div class="team-grid">
+      {% for member in leadership %}
+      <div class="team-member">
+        <img
+          class="member-image"
+          src="{{ member.photo_url or 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop' }}"
+          alt="{{ member.name }}"
+        />
+        <h3 class="member-name">{{ member.name }}</h3>
+        <div class="member-role">{{ member.position }}</div>
+        <p>{{ member.bio }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% if team %}
+    <h2 class="section-title mt-5">Our Team</h2>
+    <div class="team-grid">
+      {% for member in team %}
+      <div class="team-member">
+        <img
+          class="member-image"
+          src="{{ member.photo_url or 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop' }}"
+          alt="{{ member.name }}"
+        />
+        <h3 class="member-name">{{ member.name }}</h3>
+        <div class="member-role">{{ member.position }}</div>
+        <p>{{ member.bio }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %} {% endblock %}

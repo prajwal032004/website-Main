@@ -1,0 +1,189 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if testimonial else 'New' }} Testimonial{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>
+    <i class="fas fa-{{ 'edit' if testimonial else 'plus' }}"></i> 
+    {{ 'Edit' if testimonial else 'New' }} Testimonial
+  </h1>
+  <p class="text-muted">{{ 'Update' if testimonial else 'Add a new' }} customer testimonial</p>
+</div>
+
+<form method="POST" action="{{ url_for('admin_edit_testimonial', id=testimonial.id) if testimonial else url_for('admin_edit_testimonial') }}">
+  <div class="row">
+    <div class="col-md-8">
+      <!-- Basic Information -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-user"></i> Customer Information
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name *</label>
+            <input type="text" class="form-control" id="name" name="name" 
+                   value="{{ testimonial.name if testimonial else '' }}" required 
+                   placeholder="Customer name">
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" class="form-control" id="location" name="location" 
+                     value="{{ testimonial.location if testimonial else '' }}" 
+                     placeholder="City, State">
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="role" class="form-label">Role/Profession</label>
+              <input type="text" class="form-control" id="role" name="role" 
+                     value="{{ testimonial.role if testimonial else '' }}" 
+                     placeholder="e.g., Wheat Farmer">
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="avatar_url" class="form-label">Avatar/Photo URL</label>
+            <input type="url" class="form-control" id="avatar_url" name="avatar_url" 
+                   value="{{ testimonial.avatar_url if testimonial else '' }}" 
+                   placeholder="https://example.com/photo.jpg">
+          </div>
+          
+          <div class="mb-3">
+            <label for="testimonial" class="form-label">Testimonial *</label>
+            <textarea class="form-control" id="testimonial" name="testimonial" 
+                      rows="5" required placeholder="Customer feedback...">{{ testimonial.testimonial if testimonial else '' }}</textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="rating" class="form-label">Rating</label>
+            <select class="form-select" id="rating" name="rating">
+              {% for i in range(1, 6) %}
+              <option value="{{ i }}" {{ 'selected' if testimonial and testimonial.rating == i else '' }}>
+                {{ i }} Star{{ 's' if i > 1 else '' }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Impact Metrics -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-chart-line"></i> Impact Metrics (Optional)
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="yield_increase" class="form-label">Yield Increase</label>
+              <input type="text" class="form-control" id="yield_increase" name="yield_increase" 
+                     value="{{ testimonial.yield_increase if testimonial else '' }}" 
+                     placeholder="e.g., 35%">
+              <small class="text-muted">Percentage or amount</small>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <label for="water_saved" class="form-label">Water Saved</label>
+              <input type="text" class="form-control" id="water_saved" name="water_saved" 
+                     value="{{ testimonial.water_saved if testimonial else '' }}" 
+                     placeholder="e.g., 40%">
+              <small class="text-muted">Percentage or amount</small>
+            </div>
+            
+            <div class="col-md-4 mb-3">
+              <label for="income_increase" class="form-label">Income Increase</label>
+              <input type="text" class="form-control" id="income_increase" name="income_increase" 
+                     value="{{ testimonial.income_increase if testimonial else '' }}" 
+                     placeholder="e.g., ₹50K">
+              <small class="text-muted">Amount or percentage</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Video -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-video"></i> Video Testimonial (Optional)
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="video_url" class="form-label">Video URL</label>
+            <input type="url" class="form-control" id="video_url" name="video_url" 
+                   value="{{ testimonial.video_url if testimonial else '' }}" 
+                   placeholder="YouTube embed URL">
+            <small class="text-muted">YouTube or Vimeo embed URL</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <!-- Settings -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-cog"></i> Settings
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="is_featured" 
+                     name="is_featured" {{ 'checked' if testimonial and testimonial.is_featured else '' }}>
+              <label class="form-check-label" for="is_featured">
+                Featured Testimonial
+              </label>
+            </div>
+            <small class="text-muted">Show in featured section</small>
+          </div>
+          
+          <div class="mb-3">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="is_active" 
+                     name="is_active" {{ 'checked' if not testimonial or testimonial.is_active else '' }}>
+              <label class="form-check-label" for="is_active">
+                Active
+              </label>
+            </div>
+            <small class="text-muted">Display on website</small>
+          </div>
+          
+          <div class="mb-3">
+            <label for="order_index" class="form-label">Display Order</label>
+            <input type="number" class="form-control" id="order_index" name="order_index" 
+                   value="{{ testimonial.order_index if testimonial else 0 }}" min="0">
+            <small class="text-muted">Lower numbers appear first</small>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Preview -->
+      {% if testimonial and testimonial.avatar_url %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-eye"></i> Avatar Preview
+        </div>
+        <div class="card-body text-center">
+          <img src="{{ testimonial.avatar_url }}" 
+               class="img-fluid rounded-circle" 
+               style="max-width: 150px;" 
+               alt="Avatar">
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- Actions -->
+      <div class="card">
+        <div class="card-body">
+          <button type="submit" class="btn btn-primary w-100 mb-2">
+            <i class="fas fa-save"></i> Save Testimonial
+          </button>
+          <a href="{{ url_for('admin_manage_testimonials') }}" class="btn btn-secondary w-100">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

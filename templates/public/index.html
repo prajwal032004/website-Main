@@ -1,0 +1,360 @@
+{% extends "public/base.html" %} {% block title %}Home{% endblock %} {% block
+meta_description %}Transforming traditional farming with cutting-edge technology
+to maximize productivity{% endblock %} {% block extra_css %}
+<style>
+  .hero {
+    background: linear-gradient(
+      135deg,
+      var(--cream) 0%,
+      var(--cream-dark) 100%
+    );
+    padding: 80px 0 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2.2rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .hero-title span {
+    color: var(--secondary);
+  }
+
+  .hero-text {
+    font-size: 1.05rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .about {
+    background: var(--primary);
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+    font-weight: 700;
+  }
+
+  .section-text {
+    color: var(--white);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+
+  .about-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+    margin-top: 40px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about-card {
+    background: var(--white);
+    padding: 35px 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px var(--shadow);
+    transition: all 0.3s ease;
+  }
+
+  .about-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px var(--shadow-lg);
+  }
+
+  .card-icon {
+    color: var(--secondary);
+    font-size: 45px;
+    margin: 0 auto 15px;
+  }
+
+  .card-title {
+    font-family: "Playfair Display", serif;
+    margin-bottom: 15px;
+    color: var(--primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .card-text {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .features {
+    padding: 80px 0;
+    background: var(--white);
+  }
+
+  .features .section-title {
+    color: var(--primary);
+    text-align: center;
+  }
+
+  .features .section-text {
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .features-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .features-item {
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .features-item-banner {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 30px;
+  }
+
+  .features-item-banner img {
+    width: 100%;
+    border-radius: 50%;
+    box-shadow: 0 10px 30px var(--shadow);
+  }
+
+  .feature-item-content {
+    text-align: center;
+  }
+
+  .item-title {
+    font-family: "Playfair Display", serif;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .item-text {
+    color: var(--text-light);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 768px) {
+    .about-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-title {
+      font-size: 3.5rem;
+    }
+    .about-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .features-item {
+      flex-direction: row;
+      gap: 50px;
+    }
+    .features-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+    .features-item-banner {
+      flex: 1;
+    }
+    .feature-item-content {
+      flex: 1;
+      text-align: left;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<article>
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          {% if hero and hero.title %} {{ hero.title|safe }} {% else %}
+          Empowering Agriculture Through <span>Innovation</span>
+          {% endif %}
+        </h1>
+        <p class="hero-text">
+          {% if hero and hero.content %} {{ hero.content|safe }} {% else %}
+          Transforming traditional farming with cutting-edge technology to
+          maximize productivity while ensuring sustainability for future
+          generations. {% endif %}
+        </p>
+        {% if hero and hero.button_text %}
+        <a href="{{ hero.button_link or '#' }}" class="btn btn-primary"
+          >{{ hero.button_text }}</a
+        >
+        {% else %}
+        <a href="{{ url_for('contact') }}" class="btn btn-primary"
+          >Get Started Today</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="about" id="about">
+    <div class="container">
+      <h2 class="section-title">What We Do</h2>
+      <p class="section-text">
+        At Shramic, we bridge the gap between traditional agriculture and modern
+        technology. Our mission is to empower farmers with innovative tools,
+        knowledge, and resources.
+      </p>
+
+      {% if about_cards %}
+      <ul class="about-list">
+        {% for card in about_cards %}
+        <li>
+          <div class="about-card">
+            <div class="card-icon">
+              <ion-icon name="{{ card.icon or 'leaf-outline' }}"></ion-icon>
+            </div>
+            <h3 class="card-title">{{ card.title }}</h3>
+            <p class="card-text">{{ card.content }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <ul class="about-list">
+        <li>
+          <div class="about-card">
+            <div class="card-icon">
+              <ion-icon name="leaf-outline"></ion-icon>
+            </div>
+            <h3 class="card-title">Smart Farming Solutions</h3>
+            <p class="card-text">
+              Leverage IoT sensors, AI analytics, and precision agriculture
+              techniques to optimize crop yield.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="about-card">
+            <div class="card-icon">
+              <ion-icon name="people-outline"></ion-icon>
+            </div>
+            <h3 class="card-title">Farmer Training Programs</h3>
+            <p class="card-text">
+              Comprehensive training modules on modern farming techniques and
+              technology adoption.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div class="about-card">
+            <div class="card-icon">
+              <ion-icon name="analytics-outline"></ion-icon>
+            </div>
+            <h3 class="card-title">Market Intelligence</h3>
+            <p class="card-text">
+              Real-time market data, price forecasting, and direct market
+              linkages.
+            </p>
+          </div>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title">Why Choose Shramic?</h2>
+      <p class="section-text">
+        Our platform combines years of agricultural expertise with
+        state-of-the-art technology.
+      </p>
+
+      {% if features %}
+      <ul class="features-list">
+        {% for feature in features %}
+        <li class="features-item">
+          <figure class="features-item-banner">
+            <img
+              src="{{ feature.image_url or 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=400&fit=crop' }}"
+              alt="{{ feature.title }}"
+              loading="lazy"
+              width="400"
+              height="400"
+            />
+          </figure>
+          <div class="feature-item-content">
+            <h3 class="item-title">{{ feature.title }}</h3>
+            <p class="item-text">{{ feature.description }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <ul class="features-list">
+        <li class="features-item">
+          <figure class="features-item-banner">
+            <img
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=400&fit=crop"
+              alt="Technology"
+              loading="lazy"
+              width="400"
+              height="400"
+            />
+          </figure>
+          <div class="feature-item-content">
+            <h3 class="item-title">Technology That Works</h3>
+            <p class="item-text">
+              User-friendly mobile and web applications designed specifically
+              for farmers.
+            </p>
+          </div>
+        </li>
+        <li class="features-item">
+          <figure class="features-item-banner">
+            <img
+              src="https://images.unsplash.com/photo-1593113646773-028c19d7e1e5?w=400&h=400&fit=crop"
+              alt="Sustainable"
+              loading="lazy"
+              width="400"
+              height="400"
+            />
+          </figure>
+          <div class="feature-item-content">
+            <h3 class="item-title">Sustainable & Affordable</h3>
+            <p class="item-text">
+              Making advanced agricultural solutions accessible to all farmers.
+            </p>
+          </div>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </section>
+</article>
+{% endblock %}

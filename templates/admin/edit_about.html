@@ -1,0 +1,214 @@
+{% extends "admin/base.html" %} {% block title %}Edit About Page{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1><i class="fas fa-info-circle"></i> Edit About Page</h1>
+  <p class="text-muted">Manage about page content and sections</p>
+</div>
+
+<!-- Story Section -->
+<form method="POST" action="{{ url_for('admin_edit_about') }}">
+  <input type="hidden" name="section" value="story" />
+
+  <div class="card mb-4">
+    <div class="card-header"><i class="fas fa-book"></i> Our Story</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="story_title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="story_title"
+          name="title"
+          value="{{ story.title if story else '' }}"
+          placeholder="Our Story"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="story_content" class="form-label">Content</label>
+        <textarea
+          class="form-control"
+          id="story_content"
+          name="content"
+          rows="5"
+          placeholder="Tell your story..."
+        >
+{{ story.content if story else '' }}</textarea
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="story_image" class="form-label">Image URL</label>
+        <input
+          type="url"
+          class="form-control"
+          id="story_image"
+          name="image_url"
+          value="{{ story.image_url if story else '' }}"
+          placeholder="https://..."
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Story
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Mission Section -->
+<form method="POST" action="{{ url_for('admin_edit_about') }}">
+  <input type="hidden" name="section" value="mission" />
+
+  <div class="card mb-4">
+    <div class="card-header"><i class="fas fa-bullseye"></i> Our Mission</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="mission_title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="mission_title"
+          name="title"
+          value="{{ mission.title if mission else '' }}"
+          placeholder="Our Mission"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="mission_content" class="form-label">Content</label>
+        <textarea
+          class="form-control"
+          id="mission_content"
+          name="content"
+          rows="4"
+          placeholder="Describe your mission..."
+        >
+{{ mission.content if mission else '' }}</textarea
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="mission_image" class="form-label">Image URL</label>
+        <input
+          type="url"
+          class="form-control"
+          id="mission_image"
+          name="image_url"
+          value="{{ mission.image_url if mission else '' }}"
+          placeholder="https://..."
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Mission
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Vision Section -->
+<form method="POST" action="{{ url_for('admin_edit_about') }}">
+  <input type="hidden" name="section" value="vision" />
+
+  <div class="card mb-4">
+    <div class="card-header"><i class="fas fa-eye"></i> Our Vision</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="vision_title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="vision_title"
+          name="title"
+          value="{{ vision.title if vision else '' }}"
+          placeholder="Our Vision"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="vision_content" class="form-label">Content</label>
+        <textarea
+          class="form-control"
+          id="vision_content"
+          name="content"
+          rows="4"
+          placeholder="Describe your vision..."
+        >
+{{ vision.content if vision else '' }}</textarea
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="vision_image" class="form-label">Image URL</label>
+        <input
+          type="url"
+          class="form-control"
+          id="vision_image"
+          name="image_url"
+          value="{{ vision.image_url if vision else '' }}"
+          placeholder="https://..."
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Vision
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Values Section -->
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-heart"></i> Our Values</span>
+    <button
+      class="btn btn-sm btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#addValueModal"
+    >
+      <i class="fas fa-plus"></i> Add Value
+    </button>
+  </div>
+  <div class="card-body">
+    {% if values %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for value in values %}
+          <tr>
+            <td>{{ value.order_index }}</td>
+            <td>{{ value.title }}</td>
+            <td>{{ value.content[:60] }}...</td>
+            <td>
+              <span
+                class="badge bg-{{ 'success' if value.is_active else 'secondary' }}"
+              >
+                {{ 'Active' if value.is_active else 'Inactive' }}
+              </span>
+            </td>
+            <td class="table-actions">
+              <button class="btn btn-sm btn-primary">
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No values added yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

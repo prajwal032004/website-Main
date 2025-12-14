@@ -1,0 +1,136 @@
+{% extends "admin/base.html" %} {% block title %}Dashboard{% endblock %} {%
+block content %}
+<div class="page-header">
+  <h1><i class="fas fa-dashboard"></i> Dashboard</h1>
+  <p class="text-muted">Welcome to Shramic Networks CMS</p>
+</div>
+
+<div class="row">
+  <div class="col-md-3 mb-4">
+    <div class="stats-card">
+      <h3>{{ stats.total_posts }}</h3>
+      <p><i class="fas fa-blog"></i> Total Blog Posts</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-4">
+    <div
+      class="stats-card"
+      style="background: linear-gradient(135deg, #27ae60, #229954)"
+    >
+      <h3>{{ stats.published_posts }}</h3>
+      <p><i class="fas fa-check-circle"></i> Published Posts</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-4">
+    <div
+      class="stats-card"
+      style="background: linear-gradient(135deg, #3498db, #2874a6)"
+    >
+      <h3>{{ stats.total_testimonials }}</h3>
+      <p><i class="fas fa-quote-left"></i> Testimonials</p>
+    </div>
+  </div>
+  <div class="col-md-3 mb-4">
+    <div
+      class="stats-card"
+      style="background: linear-gradient(135deg, #9b59b6, #7d3c98)"
+    >
+      <h3>{{ stats.team_members }}</h3>
+      <p><i class="fas fa-users"></i> Team Members</p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-newspaper"></i> Recent Blog Posts
+      </div>
+      <div class="card-body">
+        <div class="list-group list-group-flush">
+          {% for post in recent_posts %}
+          <a
+            href="{{ url_for('admin_edit_blog', id=post.id) }}"
+            class="list-group-item list-group-item-action"
+          >
+            <div class="d-flex justify-content-between">
+              <strong>{{ post.title }}</strong>
+              <span
+                class="badge bg-{{ 'success' if post.is_published else 'warning' }}"
+              >
+                {{ 'Published' if post.is_published else 'Draft' }}
+              </span>
+            </div>
+            <small class="text-muted"
+              >{{ post.created_at|datetime('%B %d, %Y') }}</small
+            >
+          </a>
+          {% else %}
+          <p class="text-muted">No blog posts yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-star"></i> Recent Testimonials
+      </div>
+      <div class="card-body">
+        <div class="list-group list-group-flush">
+          {% for testimonial in recent_testimonials %}
+          <a
+            href="{{ url_for('admin_edit_testimonial', id=testimonial.id) }}"
+            class="list-group-item list-group-item-action"
+          >
+            <strong>{{ testimonial.name }}</strong> - {{ testimonial.location }}
+            <div class="text-warning">
+              {% for i in range(testimonial.rating) %}★{% endfor %}
+            </div>
+          </a>
+          {% else %}
+          <p class="text-muted">No testimonials yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header"><i class="fas fa-rocket"></i> Quick Actions</div>
+      <div class="card-body">
+        <a
+          href="{{ url_for('admin_edit_blog') }}"
+          class="btn btn-primary me-2 mb-2"
+        >
+          <i class="fas fa-plus"></i> New Blog Post
+        </a>
+        <a
+          href="{{ url_for('admin_edit_testimonial') }}"
+          class="btn btn-success me-2 mb-2"
+        >
+          <i class="fas fa-plus"></i> New Testimonial
+        </a>
+        <a
+          href="{{ url_for('admin_edit_team') }}"
+          class="btn btn-info me-2 mb-2"
+        >
+          <i class="fas fa-plus"></i> New Team Member
+        </a>
+        <a
+          href="{{ url_for('admin_settings') }}"
+          class="btn btn-secondary me-2 mb-2"
+        >
+          <i class="fas fa-cog"></i> Settings
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

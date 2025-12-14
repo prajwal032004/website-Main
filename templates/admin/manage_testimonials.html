@@ -1,0 +1,138 @@
+{% extends "admin/base.html" %} {% block title %}Manage Testimonials{% endblock
+%} {% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h1><i class="fas fa-quote-left"></i> Manage Testimonials</h1>
+    <p class="text-muted">Customer success stories and feedback</p>
+  </div>
+  <a href="{{ url_for('admin_edit_testimonial') }}" class="btn btn-primary">
+    <i class="fas fa-plus"></i> New Testimonial
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-header"><i class="fas fa-list"></i> All Testimonials</div>
+  <div class="card-body">
+    {% if testimonials %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Rating</th>
+            <th>Featured</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for testimonial in testimonials %}
+          <tr>
+            <td>{{ testimonial.order_index }}</td>
+            <td>
+              <strong>{{ testimonial.name }}</strong>
+              {% if testimonial.role %}
+              <br /><small class="text-muted">{{ testimonial.role }}</small>
+              {% endif %}
+            </td>
+            <td>{{ testimonial.location or '-' }}</td>
+            <td>
+              <div class="text-warning">
+                {% for i in range(testimonial.rating) %}★{% endfor %} {% for i
+                in range(5 - testimonial.rating) %}☆{% endfor %}
+              </div>
+            </td>
+            <td>
+              {% if testimonial.is_featured %}
+              <span class="badge bg-warning text-dark">
+                <i class="fas fa-star"></i> Featured
+              </span>
+              {% else %}
+              <span class="text-muted">-</span>
+              {% endif %}
+            </td>
+            <td>
+              <span
+                class="badge bg-{{ 'success' if testimonial.is_active else 'secondary' }}"
+              >
+                {{ 'Active' if testimonial.is_active else 'Inactive' }}
+              </span>
+            </td>
+            <td class="table-actions">
+              <a
+                href="{{ url_for('admin_edit_testimonial', id=testimonial.id) }}"
+                class="btn btn-sm btn-primary"
+                title="Edit"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <form
+                method="POST"
+                action="{{ url_for('admin_delete_testimonial', id=testimonial.id) }}"
+                style="display: inline"
+                onsubmit="return confirm('Are you sure you want to delete this testimonial?');"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-danger"
+                  title="Delete"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-quote-left fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">No testimonials yet</h5>
+      <p class="text-muted">Start by adding your first customer testimonial</p>
+      <a href="{{ url_for('admin_edit_testimonial') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add First Testimonial
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if testimonials %}
+<div class="card mt-4">
+  <div class="card-header">
+    <i class="fas fa-info-circle"></i> Impact Metrics Summary
+  </div>
+  <div class="card-body">
+    <div class="row text-center">
+      <div class="col-md-3">
+        <h4 class="text-primary">{{ testimonials|length }}</h4>
+        <small class="text-muted">Total Testimonials</small>
+      </div>
+      <div class="col-md-3">
+        <h4 class="text-success">
+          {{ testimonials|selectattr('is_active')|list|length }}
+        </h4>
+        <small class="text-muted">Active</small>
+      </div>
+      <div class="col-md-3">
+        <h4 class="text-warning">
+          {{ testimonials|selectattr('is_featured')|list|length }}
+        </h4>
+        <small class="text-muted">Featured</small>
+      </div>
+      <div class="col-md-3">
+        <h4 class="text-info">
+          {% set avg_rating = (testimonials|sum(attribute='rating') /
+          testimonials|length)|round(1) if testimonials else 0 %} {{ avg_rating
+          }}
+        </h4>
+        <small class="text-muted">Avg Rating</small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock %}

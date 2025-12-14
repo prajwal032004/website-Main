@@ -1,0 +1,245 @@
+{% extends "admin/base.html" %} {% block title %}Manage Statistics{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1><i class="fas fa-chart-bar"></i> Manage Statistics</h1>
+  <p class="text-muted">Homepage statistics and key metrics</p>
+</div>
+
+<!-- Add/Edit Statistic Form -->
+<div class="card mb-4">
+  <div class="card-header"><i class="fas fa-plus"></i> Add New Statistic</div>
+  <div class="card-body">
+    <form
+      method="POST"
+      action="{{ url_for('admin_manage_stats') }}"
+      class="row g-3"
+    >
+      <input type="hidden" name="stat_id" id="stat_id" value="" />
+
+      <div class="col-md-3">
+        <label for="label" class="form-label">Label *</label>
+        <input
+          type="text"
+          class="form-control"
+          id="label"
+          name="label"
+          placeholder="e.g., Farmers Helped"
+          required
+        />
+      </div>
+
+      <div class="col-md-2">
+        <label for="value" class="form-label">Value *</label>
+        <input
+          type="text"
+          class="form-control"
+          id="value"
+          name="value"
+          placeholder="e.g., 50K"
+          required
+        />
+      </div>
+
+      <div class="col-md-2">
+        <label for="suffix" class="form-label">Suffix</label>
+        <input
+          type="text"
+          class="form-control"
+          id="suffix"
+          name="suffix"
+          placeholder="e.g., +, %, Cr"
+        />
+      </div>
+
+      <div class="col-md-3">
+        <label for="icon" class="form-label">Icon Class</label>
+        <input
+          type="text"
+          class="form-control"
+          id="icon"
+          name="icon"
+          placeholder="e.g., fas fa-users"
+        />
+        <small class="text-muted">
+          <a href="https://fontawesome.com/icons" target="_blank"
+            >Browse icons</a
+          >
+        </small>
+      </div>
+
+      <div class="col-md-1">
+        <label for="order_index" class="form-label">Order</label>
+        <input
+          type="number"
+          class="form-control"
+          id="order_index"
+          name="order_index"
+          value="0"
+          min="0"
+        />
+      </div>
+
+      <div class="col-md-1 d-flex align-items-end">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="is_active"
+            name="is_active"
+            checked
+          />
+          <label class="form-check-label" for="is_active"> Active </label>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save"></i> Save Statistic
+        </button>
+        <button type="reset" class="btn btn-secondary" onclick="clearForm()">
+          <i class="fas fa-times"></i> Clear
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Current Statistics -->
+<div class="card">
+  <div class="card-header"><i class="fas fa-list"></i> Current Statistics</div>
+  <div class="card-body">
+    {% if stats %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Preview</th>
+            <th>Label</th>
+            <th>Value</th>
+            <th>Suffix</th>
+            <th>Icon</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stat in stats %}
+          <tr>
+            <td>{{ stat.order_index }}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                {% if stat.icon %}
+                <i class="{{ stat.icon }} fa-2x text-primary me-2"></i>
+                {% endif %}
+                <div>
+                  <h4 class="mb-0">{{ stat.value }}{{ stat.suffix or '' }}</h4>
+                  <small class="text-muted">{{ stat.label }}</small>
+                </div>
+              </div>
+            </td>
+            <td>{{ stat.label }}</td>
+            <td>{{ stat.value }}</td>
+            <td>{{ stat.suffix or '-' }}</td>
+            <td>
+              {% if stat.icon %}
+              <i class="{{ stat.icon }}"></i> <code>{{ stat.icon }}</code>
+              {% else %}
+              <span class="text-muted">None</span>
+              {% endif %}
+            </td>
+            <td>
+              <span
+                class="badge bg-{{ 'success' if stat.is_active else 'secondary' }}"
+              >
+                {{ 'Active' if stat.is_active else 'Inactive' }}
+              </span>
+            </td>
+            <td class="table-actions">
+              <button
+                class="btn btn-sm btn-primary"
+                onclick="editStat({{ stat.id }}, '{{ stat.label }}', '{{ stat.value }}', '{{ stat.suffix or '' }}', '{{ stat.icon or '' }}', {{ stat.order_index }}, {{ 'true' if stat.is_active else 'false' }})"
+                title="Edit"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+              <form
+                method="POST"
+                action="{{ url_for('admin_delete_stat', id=stat.id) }}"
+                style="display: inline"
+                onsubmit="return confirm('Are you sure you want to delete this statistic?');"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-sm btn-danger"
+                  title="Delete"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">No statistics yet</h5>
+      <p class="text-muted">Add your first statistic using the form above</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Preview Section -->
+{% if stats %}
+<div class="card mt-4">
+  <div class="card-header"><i class="fas fa-eye"></i> Homepage Preview</div>
+  <div class="card-body">
+    <div class="row text-center">
+      {% for stat in stats if stat.is_active %}
+      <div class="col-md-3 mb-3">
+        <div class="p-4 bg-light rounded">
+          {% if stat.icon %}
+          <i class="{{ stat.icon }} fa-3x text-primary mb-3"></i>
+          {% endif %}
+          <h2 class="text-primary mb-0">
+            {{ stat.value }}{{ stat.suffix or '' }}
+          </h2>
+          <p class="text-muted mb-0">{{ stat.label }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock %} {% block extra_js %}
+<script>
+  function editStat(id, label, value, suffix, icon, order, isActive) {
+    document.getElementById("stat_id").value = id;
+    document.getElementById("label").value = label;
+    document.getElementById("value").value = value;
+    document.getElementById("suffix").value = suffix;
+    document.getElementById("icon").value = icon;
+    document.getElementById("order_index").value = order;
+    document.getElementById("is_active").checked = isActive;
+
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Change button text
+    const form = document.querySelector("form");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Statistic';
+  }
+
+  function clearForm() {
+    document.getElementById("stat_id").value = "";
+    const form = document.querySelector("form");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '<i class="fas fa-save"></i> Save Statistic';
+  }
+</script>
+{% endblock %}

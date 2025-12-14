@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
+
+    <title>
+      {% block title %}{{ site_title }}{% endblock %} - {{ site_tagline }}
+    </title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta
+      name="description"
+      content="{% block meta_description %}{{ site_tagline }}{% endblock %}"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://careers.shramic.com/static/img/logo.png"
+      type="image/png"
+    />
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- CSS -->
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    /></noscript>
+
+    <link
+      rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    /></noscript>
+
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    /></noscript>
+
+    <style>
+      :root {
+          --cream: #FFF8F0;
+          --cream-dark: #F5EBE0;
+          --primary: #2C3E50;
+          --secondary: #E67E22;
+          --accent: #D4A574;
+          --text-dark: #2C3E50;
+          --text-light: #6C757D;
+          --success: #27AE60;
+          --white: #FFFFFF;
+          --shadow: rgba(0, 0, 0, 0.08);
+          --shadow-lg: rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          background-color: var(--cream);
+          color: var(--text-dark);
+          line-height: 1.7;
+          overflow-x: hidden;
+      }
+
+      /* Navbar */
+      .navbar {
+          background-color: var(--white);
+          box-shadow: 0 2px 10px var(--shadow);
+          padding: 0.75rem 0;
+          transition: all 0.3s ease;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+      }
+
+      .navbar-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-family: 'Playfair Display', serif;
+          font-weight: 700;
+          font-size: 1.3rem;
+          color: var(--primary) !important;
+      }
+
+      .navbar-brand img {
+          height: 40px;
+          width: auto;
+          transition: transform 0.3s ease;
+      }
+
+      .navbar-brand:hover img {
+          transform: scale(1.05);
+      }
+
+      .nav-link {
+          color: var(--text-dark) !important;
+          font-weight: 500;
+          padding: 0.7rem 1rem !important;
+          transition: all 0.3s ease;
+          position: relative;
+          font-size: 0.95rem;
+      }
+
+      .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 2px;
+          background-color: var(--secondary);
+          transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after,
+      .nav-link.active::after {
+          width: 70%;
+      }
+
+      .btn-primary {
+          background-color: var(--secondary);
+          border: 2px solid var(--secondary);
+          color: var(--white);
+          padding: 0.6rem 1.5rem;
+          font-weight: 600;
+          border-radius: 50px;
+          transition: all 0.3s ease;
+          font-size: 0.9rem;
+      }
+
+      .btn-primary:hover {
+          background-color: transparent;
+          color: var(--secondary);
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+      }
+
+      /* Footer */
+      footer {
+          background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+          color: var(--white);
+          padding: 3rem 0 1rem;
+          margin-top: 80px;
+      }
+
+      footer h5 {
+          color: var(--white);
+          font-size: 1.1rem;
+          margin-bottom: 1.2rem;
+          position: relative;
+          padding-bottom: 0.5rem;
+      }
+
+      footer h5::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 50px;
+          height: 3px;
+          background-color: var(--secondary);
+      }
+
+      footer a {
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+          transition: all 0.3s ease;
+          display: block;
+          margin-bottom: 0.5rem;
+          font-size: 0.9rem;
+      }
+
+      footer a:hover {
+          color: var(--secondary);
+          padding-left: 5px;
+      }
+
+      .social-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 15px;
+      }
+
+      .social-links a {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+          transition: all 0.3s ease;
+          margin-bottom: 0;
+      }
+
+      .social-links a:hover {
+          background-color: var(--secondary);
+          transform: translateY(-3px);
+          padding-left: 0;
+      }
+
+      .footer-bottom {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          margin-top: 2rem;
+          padding-top: 1.5rem;
+          text-align: center;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.85rem;
+      }
+
+      .footer-bottom a {
+          display: inline;
+          color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* Page loader */
+      .page-loader {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: var(--cream);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+          transition: opacity 0.3s;
+      }
+
+      .page-loader.hidden {
+          opacity: 0;
+          pointer-events: none;
+      }
+
+      .spinner {
+          width: 50px;
+          height: 50px;
+          border: 4px solid var(--cream-dark);
+          border-top-color: var(--secondary);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+          to { transform: rotate(360deg); }
+      }
+
+      /* Responsive */
+      @media (max-width: 576px) {
+          .navbar-brand {
+              font-size: 1.1rem;
+          }
+          .navbar-brand img {
+              height: 35px;
+          }
+      }
+
+      {% block extra_css %}{% endblock %}
+    </style>
+  </head>
+  <body>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+          <img
+            src="https://careers.shramic.com/static/img/logo.png"
+            alt="Shramic Logo"
+            width="40"
+            height="40"
+            loading="eager"
+          />
+          <span>Shramic Networks</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'index' %}active{% endif %}"
+                href="{{ url_for('index') }}"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'about' %}active{% endif %}"
+                href="{{ url_for('about') }}"
+                >About</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint and 'blog' in request.endpoint %}active{% endif %}"
+                href="{{ url_for('blog') }}"
+                >Blog</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'testimonials' %}active{% endif %}"
+                href="{{ url_for('testimonials') }}"
+                >Testimonials</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}"
+                href="{{ url_for('contact') }}"
+                >Contact</a
+              >
+            </li>
+            <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+              <a class="btn btn-primary btn-sm" href="{{ url_for('contact') }}"
+                >Get in Touch</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>{% block content %}{% endblock %}</main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <img
+                src="https://careers.shramic.com/static/img/logo.png"
+                alt="Shramic Networks Logo"
+                style="height: 50px; margin-right: 15px"
+                width="50"
+                height="50"
+                loading="lazy"
+              />
+              <h5 class="mb-0">{{ site_title }}</h5>
+            </div>
+            <p style="color: rgba(255, 255, 255, 0.8)">{{ site_tagline }}</p>
+            <div class="social-links">
+              {% if facebook_url %}<a
+                href="{{ facebook_url }}"
+                aria-label="Facebook"
+                target="_blank"
+                ><i class="fab fa-facebook-f"></i></a
+              >{% endif %} {% if twitter_url %}<a
+                href="{{ twitter_url }}"
+                aria-label="Twitter"
+                target="_blank"
+                ><i class="fab fa-twitter"></i></a
+              >{% endif %} {% if linkedin_url %}<a
+                href="{{ linkedin_url }}"
+                aria-label="LinkedIn"
+                target="_blank"
+                ><i class="fab fa-linkedin-in"></i></a
+              >{% endif %} {% if instagram_url %}<a
+                href="{{ instagram_url }}"
+                aria-label="Instagram"
+                target="_blank"
+                ><i class="fab fa-instagram"></i></a
+              >{% endif %} {% if github_url %}<a
+                href="{{ github_url }}"
+                aria-label="GitHub"
+                target="_blank"
+                ><i class="fab fa-github"></i></a
+              >{% endif %}
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-6 mb-4">
+            <h5>Company</h5>
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="{{ url_for('blog') }}">Blog</a>
+            <a href="{{ url_for('testimonials') }}">Testimonials</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h5>Services</h5>
+            <a href="{{ url_for('index') }}#about">Smart Farming</a>
+            <a href="{{ url_for('index') }}#about">Training Programs</a>
+            <a href="{{ url_for('index') }}#about">Market Intelligence</a>
+            <a href="{{ url_for('index') }}#features">Farmer Support</a>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <h5>Contact Info</h5>
+            {% if contact_email %}
+            <p style="color: rgba(255, 255, 255, 0.8)">
+              <i class="fas fa-envelope me-2"></i>
+              <a href="mailto:{{ contact_email }}" style="display: inline"
+                >{{ contact_email }}</a
+              >
+            </p>
+            {% endif %} {% if contact_phone %}
+            <p style="color: rgba(255, 255, 255, 0.8)">
+              <i class="fas fa-phone me-2"></i>
+              <a href="tel:{{ contact_phone }}" style="display: inline"
+                >{{ contact_phone }}</a
+              >
+            </p>
+            {% endif %} {% if contact_address %}
+            <p style="color: rgba(255, 255, 255, 0.8)">
+              <i class="fas fa-map-marker-alt me-2"></i>
+              {{ contact_address }}
+            </p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 {{ site_title }}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <!-- Ionicons -->
+    <script
+      type="module"
+      defer
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      defer
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+
+    <script>
+      // Hide loader
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", hideLoader);
+      } else {
+        hideLoader();
+      }
+
+      function hideLoader() {
+        setTimeout(() => {
+          document.getElementById("pageLoader").classList.add("hidden");
+        }, 100);
+      }
+
+      // Navbar scroll effect
+      window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 50) {
+          navbar.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+        } else {
+          navbar.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.08)";
+        }
+      });
+
+      // Smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            const navbarHeight = document.querySelector(".navbar").offsetHeight;
+            const targetPosition = target.offsetTop - navbarHeight;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: "smooth",
+            });
+
+            const navbarCollapse = document.querySelector(".navbar-collapse");
+            if (navbarCollapse && navbarCollapse.classList.contains("show")) {
+              const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+              if (bsCollapse) bsCollapse.hide();
+            }
+          }
+        });
+      });
+
+      // Active nav links on scroll
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          if (window.pageYOffset >= sectionTop - 100) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === `#${current}`) {
+            link.classList.add("active");
+          }
+        });
+      });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

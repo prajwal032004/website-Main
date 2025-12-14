@@ -1,0 +1,329 @@
+{% extends "public/base.html" %} {% block title %}{{ post.title }}{% endblock %}
+{% block meta_description %}{{ post.meta_description or post.excerpt }}{%
+endblock %} {% block extra_css %}
+<style>
+  .blog-detail-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+    padding: 60px 0 40px;
+    color: var(--white);
+  }
+
+  .blog-detail-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .blog-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
+  }
+
+  .blog-detail-meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .blog-featured-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px var(--shadow-lg);
+    margin: -60px 0 40px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .blog-content-section {
+    padding: 40px 0 80px;
+    background: var(--white);
+  }
+
+  .blog-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .blog-content p {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .blog-content h2,
+  .blog-content h3 {
+    font-family: "Playfair Display", serif;
+    color: var(--primary);
+    margin: 2rem 0 1rem;
+  }
+
+  .blog-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .blog-content h3 {
+    font-size: 1.4rem;
+  }
+
+  .blog-content ul,
+  .blog-content ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+  }
+
+  .blog-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.8;
+  }
+
+  .blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 40px 0;
+    padding: 30px 0;
+    border-top: 2px solid var(--cream-dark);
+    border-bottom: 2px solid var(--cream-dark);
+  }
+
+  .blog-tag {
+    background: var(--cream-dark);
+    color: var(--text-dark);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .blog-tag:hover {
+    background: var(--secondary);
+    color: white;
+  }
+
+  .related-posts {
+    padding: 60px 0;
+    background: var(--cream);
+  }
+
+  .related-posts h2 {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .related-card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px var(--shadow);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .related-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px var(--shadow-lg);
+  }
+
+  .related-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .related-card-content {
+    padding: 20px;
+  }
+
+  .related-card h3 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 30px 0;
+  }
+
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    transition: transform 0.3s ease;
+  }
+
+  .share-btn:hover {
+    transform: translateY(-3px);
+  }
+
+  .share-btn.facebook {
+    background: #1877f2;
+  }
+  .share-btn.twitter {
+    background: #1da1f2;
+  }
+  .share-btn.linkedin {
+    background: #0077b5;
+  }
+  .share-btn.whatsapp {
+    background: #25d366;
+  }
+
+  @media (min-width: 768px) {
+    .related-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-detail-title {
+      font-size: 3rem;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<article>
+  <!-- Header -->
+  <header class="blog-detail-header">
+    <div class="container">
+      <div class="blog-detail-meta">
+        <span
+          ><i class="far fa-calendar"></i> {{ post.published_at|datetime('%B %d,
+          %Y') }}</span
+        >
+        <span><i class="far fa-clock"></i> {{ post.read_time }} min read</span>
+        <span><i class="far fa-user"></i> {{ post.author }}</span>
+        {% if post.category %}
+        <span><i class="far fa-folder"></i> {{ post.category.name }}</span>
+        {% endif %}
+        <span><i class="far fa-eye"></i> {{ post.views }} views</span>
+      </div>
+      <h1 class="blog-detail-title">{{ post.title }}</h1>
+    </div>
+  </header>
+
+  <!-- Featured Image -->
+  <div class="container">
+    {% if post.featured_image %}
+    <img
+      class="blog-featured-image"
+      src="{{ post.featured_image }}"
+      alt="{{ post.title }}"
+    />
+    {% endif %}
+  </div>
+
+  <!-- Content -->
+  <section class="blog-content-section">
+    <div class="container">
+      <div class="blog-content">
+        {% if post.excerpt %}
+        <p
+          class="lead"
+          style="font-size: 1.2rem; color: var(--text-light); font-weight: 500"
+        >
+          {{ post.excerpt }}
+        </p>
+        {% endif %} {{ post.content|safe }}
+
+        <!-- Tags -->
+        {% if post.tags %}
+        <div class="blog-tags">
+          <strong>Tags:</strong>
+          {% for tag in post.tags.split(',') %}
+          <span class="blog-tag">{{ tag.strip() }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Share Buttons -->
+        <div class="share-buttons">
+          <strong style="margin-right: 10px">Share:</strong>
+          <a
+            href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}"
+            class="share-btn facebook"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a
+            href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}"
+            class="share-btn twitter"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url }}"
+            class="share-btn linkedin"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a
+            href="https://wa.me/?text={{ post.title }} {{ request.url }}"
+            class="share-btn whatsapp"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Related Posts -->
+  {% if related_posts %}
+  <section class="related-posts">
+    <div class="container">
+      <h2>Related Articles</h2>
+      <div class="related-grid">
+        {% for related in related_posts %}
+        <a
+          href="{{ url_for('blog_detail', slug=related.slug) }}"
+          class="related-card"
+        >
+          <img
+            src="{{ related.featured_image or 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&h=300&fit=crop' }}"
+            alt="{{ related.title }}"
+          />
+          <div class="related-card-content">
+            <h3>{{ related.title }}</h3>
+            <p style="color: var(--text-light); font-size: 0.9rem">
+              {{ related.excerpt|truncate_words(20) }}
+            </p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</article>
+{% endblock %}

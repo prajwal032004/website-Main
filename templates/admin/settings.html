@@ -1,0 +1,226 @@
+{% extends "admin/base.html" %} {% block title %}Site Settings{% endblock %} {%
+block content %}
+<div class="page-header">
+  <h1><i class="fas fa-cog"></i> Site Settings</h1>
+  <p class="text-muted">Configure global site settings</p>
+</div>
+
+<form method="POST" action="{{ url_for('admin_settings') }}">
+  <!-- General Settings -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-info-circle"></i> General Information
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="site_title" class="form-label">Site Title *</label>
+        <input
+          type="text"
+          class="form-control"
+          id="site_title"
+          name="site_title"
+          value="{{ settings.site_title }}"
+          required
+          placeholder="Shramic Networks"
+        />
+        <small class="text-muted"
+          >Main site title displayed in header and browser tab</small
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="site_tagline" class="form-label">Site Tagline</label>
+        <input
+          type="text"
+          class="form-control"
+          id="site_tagline"
+          name="site_tagline"
+          value="{{ settings.site_tagline }}"
+          placeholder="Empowering Agriculture Through Innovation"
+        />
+        <small class="text-muted">Brief description of your organization</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Information -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-address-book"></i> Contact Information
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="contact_email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="contact_email"
+            name="contact_email"
+            value="{{ settings.contact_email }}"
+            placeholder="info@shramic.com"
+          />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="contact_phone" class="form-label">Phone Number</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="contact_phone"
+            name="contact_phone"
+            value="{{ settings.contact_phone }}"
+            placeholder="+91 98765 43210"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="contact_address" class="form-label">Address</label>
+        <textarea
+          class="form-control"
+          id="contact_address"
+          name="contact_address"
+          rows="2"
+          placeholder="Full address"
+        >
+{{ settings.contact_address }}</textarea
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Media Links -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-share-alt"></i> Social Media Links
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="facebook_url" class="form-label">
+            <i class="fab fa-facebook text-primary"></i> Facebook URL
+          </label>
+          <input
+            type="url"
+            class="form-control"
+            id="facebook_url"
+            name="facebook_url"
+            value="{{ settings.facebook_url }}"
+            placeholder="https://facebook.com/shramic"
+          />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="twitter_url" class="form-label">
+            <i class="fab fa-twitter text-info"></i> Twitter URL
+          </label>
+          <input
+            type="url"
+            class="form-control"
+            id="twitter_url"
+            name="twitter_url"
+            value="{{ settings.twitter_url }}"
+            placeholder="https://twitter.com/shramic"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="linkedin_url" class="form-label">
+            <i class="fab fa-linkedin text-primary"></i> LinkedIn URL
+          </label>
+          <input
+            type="url"
+            class="form-control"
+            id="linkedin_url"
+            name="linkedin_url"
+            value="{{ settings.linkedin_url }}"
+            placeholder="https://linkedin.com/company/shramic"
+          />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="instagram_url" class="form-label">
+            <i class="fab fa-instagram text-danger"></i> Instagram URL
+          </label>
+          <input
+            type="url"
+            class="form-control"
+            id="instagram_url"
+            name="instagram_url"
+            value="{{ settings.instagram_url }}"
+            placeholder="https://instagram.com/shramic.info"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="github_url" class="form-label">
+            <i class="fab fa-github text-dark"></i> GitHub URL
+          </label>
+          <input
+            type="url"
+            class="form-control"
+            id="github_url"
+            name="github_url"
+            value="{{ settings.github_url }}"
+            placeholder="https://github.com/shramic"
+          />
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i>
+        <small>
+          <strong>Note:</strong> Leave any social media field empty if you don't
+          want to display it on your website. Use '#' as a placeholder if
+          needed.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="card">
+    <div class="card-body text-end">
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary me-2">
+        <i class="fas fa-times"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Settings
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Additional Info -->
+<div class="card mt-4">
+  <div class="card-header bg-light">
+    <i class="fas fa-lightbulb"></i> Tips & Information
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h6><i class="fas fa-check-circle text-success"></i> Best Practices</h6>
+        <ul class="small">
+          <li>Keep your site title short and memorable</li>
+          <li>Use a tagline that clearly describes your mission</li>
+          <li>Ensure contact information is always up-to-date</li>
+          <li>Use complete URLs for social media links</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h6><i class="fas fa-shield-alt text-primary"></i> Security Note</h6>
+        <p class="small mb-0">
+          These settings affect your entire website. Make sure all information
+          is accurate before saving. Social media links will be displayed in the
+          footer of your website.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

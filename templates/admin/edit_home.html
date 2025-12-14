@@ -1,0 +1,200 @@
+{% extends "admin/base.html" %} {% block title %}Edit Home Page{% endblock %} {%
+block content %}
+<div class="page-header">
+  <h1><i class="fas fa-home"></i> Edit Home Page</h1>
+  <p class="text-muted">Manage home page content and sections</p>
+</div>
+
+<form method="POST" action="{{ url_for('admin_edit_home') }}">
+  <!-- Hero Section -->
+  <div class="card mb-4">
+    <div class="card-header"><i class="fas fa-image"></i> Hero Section</div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="hero_title" class="form-label">Hero Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="hero_title"
+          name="hero_title"
+          value="{{ hero.title if hero else '' }}"
+          placeholder="Main headline"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="hero_content" class="form-label">Hero Content</label>
+        <textarea
+          class="form-control"
+          id="hero_content"
+          name="hero_content"
+          rows="3"
+          placeholder="Hero description"
+        >
+{{ hero.content if hero else '' }}</textarea
+        >
+      </div>
+
+      <div class="mb-3">
+        <label for="hero_image" class="form-label">Hero Image URL</label>
+        <input
+          type="url"
+          class="form-control"
+          id="hero_image"
+          name="hero_image"
+          value="{{ hero.image_url if hero else '' }}"
+          placeholder="https://..."
+        />
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="hero_button_text" class="form-label">Button Text</label>
+          <input
+            type="text"
+            class="form-control"
+            id="hero_button_text"
+            name="hero_button_text"
+            value="{{ hero.button_text if hero else '' }}"
+            placeholder="Get Started"
+          />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="hero_button_link" class="form-label">Button Link</label>
+          <input
+            type="text"
+            class="form-control"
+            id="hero_button_link"
+            name="hero_button_link"
+            value="{{ hero.button_link if hero else '' }}"
+            placeholder="/contact"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-end">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+      <i class="fas fa-times"></i> Cancel
+    </a>
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-save"></i> Save Changes
+    </button>
+  </div>
+</form>
+
+<!-- About Cards Section -->
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-th-large"></i> About Cards</span>
+    <button
+      class="btn btn-sm btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#addCardModal"
+    >
+      <i class="fas fa-plus"></i> Add Card
+    </button>
+  </div>
+  <div class="card-body">
+    {% if about_cards %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for card in about_cards %}
+          <tr>
+            <td>{{ card.order_index }}</td>
+            <td>{{ card.title }}</td>
+            <td>{{ card.content[:50] }}...</td>
+            <td>
+              <span
+                class="badge bg-{{ 'success' if card.is_active else 'secondary' }}"
+              >
+                {{ 'Active' if card.is_active else 'Inactive' }}
+              </span>
+            </td>
+            <td class="table-actions">
+              <button
+                class="btn btn-sm btn-primary"
+                onclick="editCard({{ card.id }})"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No about cards added yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Features Section -->
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="fas fa-star"></i> Features</span>
+    <button
+      class="btn btn-sm btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#addFeatureModal"
+    >
+      <i class="fas fa-plus"></i> Add Feature
+    </button>
+  </div>
+  <div class="card-body">
+    {% if features %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Title</th>
+            <th>Icon</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for feature in features %}
+          <tr>
+            <td>{{ feature.order_index }}</td>
+            <td>{{ feature.title }}</td>
+            <td><i class="{{ feature.icon }}"></i> {{ feature.icon }}</td>
+            <td>
+              <span
+                class="badge bg-{{ 'success' if feature.is_active else 'secondary' }}"
+              >
+                {{ 'Active' if feature.is_active else 'Inactive' }}
+              </span>
+            </td>
+            <td class="table-actions">
+              <button
+                class="btn btn-sm btn-primary"
+                onclick="editFeature({{ feature.id }})"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No features added yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

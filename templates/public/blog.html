@@ -1,0 +1,309 @@
+{% extends "public/base.html" %} {% block title %}Blog{% endblock %} {% block
+meta_description %}Insights, innovations, and stories from the world of smart
+agriculture{% endblock %} {% block extra_css %}
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+    padding: 100px 0 80px;
+    text-align: center;
+    color: var(--white);
+  }
+
+  .page-header h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .blog-section {
+    padding: 80px 0;
+  }
+
+  .blog-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+
+  .filter-btn {
+    background: var(--white);
+    border: 2px solid var(--cream-dark);
+    color: var(--text-dark);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .blog-card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px var(--shadow);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px var(--shadow-lg);
+  }
+
+  .blog-card-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+
+  .blog-card-content {
+    padding: 25px;
+  }
+
+  .blog-category {
+    display: inline-block;
+    background: var(--cream-dark);
+    color: var(--secondary);
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  .blog-title {
+    font-family: "Playfair Display", serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+
+  .blog-excerpt {
+    color: var(--text-light);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .blog-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+
+  .read-more {
+    color: var(--secondary);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pagination {
+    margin-top: 50px;
+    justify-content: center;
+  }
+
+  .featured-post {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    background: linear-gradient(135deg, var(--primary), #1a252f);
+    color: var(--white);
+  }
+
+  .featured-post .blog-card-img {
+    height: 350px;
+  }
+
+  .featured-post .blog-title {
+    color: var(--white);
+    font-size: 2rem;
+  }
+
+  .featured-post .blog-excerpt {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  @media (min-width: 768px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .featured-post {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<header class="page-header">
+  <div class="container">
+    <h1>Knowledge Hub</h1>
+    <p>
+      Insights, innovations, and stories from the world of smart agriculture
+    </p>
+  </div>
+</header>
+
+<section class="blog-section">
+  <div class="container">
+    <!-- Filters -->
+    <div class="blog-filters">
+      <a
+        href="{{ url_for('blog') }}"
+        class="filter-btn {% if not current_category %}active{% endif %}"
+        >All Posts</a
+      >
+      {% for category in categories %}
+      <a
+        href="{{ url_for('blog', category=category.slug) }}"
+        class="filter-btn {% if current_category == category.slug %}active{% endif %}"
+      >
+        {{ category.name }}
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="blog-grid">
+      <!-- Featured Post -->
+      {% if featured_post and not current_category %}
+      <a
+        href="{{ url_for('blog_detail', slug=featured_post.slug) }}"
+        class="blog-card featured-post"
+      >
+        <img
+          class="blog-card-img"
+          src="{{ featured_post.featured_image or 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&h=500&fit=crop' }}"
+          alt="{{ featured_post.title }}"
+        />
+        <div class="blog-card-content">
+          <span
+            class="blog-category"
+            style="background: var(--secondary); color: white"
+          >
+            {{ featured_post.category.name if featured_post.category else
+            'Featured' }}
+          </span>
+          <h2 class="blog-title">{{ featured_post.title }}</h2>
+          <div class="blog-meta">
+            <span
+              ><i class="far fa-calendar"></i> {{
+              featured_post.published_at|datetime('%B %d, %Y') }}</span
+            >
+            <span
+              ><i class="far fa-clock"></i> {{ featured_post.read_time }} min
+              read</span
+            >
+            <span><i class="far fa-user"></i> {{ featured_post.author }}</span>
+          </div>
+          <p class="blog-excerpt">
+            {{ featured_post.excerpt|truncate_words(50) }}
+          </p>
+          <span class="read-more"
+            >Read Full Article <i class="fas fa-arrow-right"></i
+          ></span>
+        </div>
+      </a>
+      {% endif %}
+
+      <!-- Regular Posts -->
+      {% if posts and posts.items %} {% for post in posts.items %}
+      <a href="{{ url_for('blog_detail', slug=post.slug) }}" class="blog-card">
+        <img
+          class="blog-card-img"
+          src="{{ post.featured_image or 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&h=300&fit=crop' }}"
+          alt="{{ post.title }}"
+        />
+        <div class="blog-card-content">
+          <span class="blog-category">
+            {{ post.category.name if post.category else 'General' }}
+          </span>
+          <h3 class="blog-title">{{ post.title }}</h3>
+          <div class="blog-meta">
+            <span
+              ><i class="far fa-calendar"></i> {{ post.published_at|datetime('%b
+              %d, %Y') }}</span
+            >
+            <span><i class="far fa-clock"></i> {{ post.read_time }} min</span>
+          </div>
+          <p class="blog-excerpt">{{ post.excerpt|truncate_words(30) }}</p>
+          <span class="read-more"
+            >Read More <i class="fas fa-arrow-right"></i
+          ></span>
+        </div>
+      </a>
+      {% endfor %} {% else %}
+      <div class="col-12 text-center py-5">
+        <p class="text-muted">No blog posts found.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if posts and posts.pages > 1 %}
+    <nav aria-label="Blog pagination">
+      <ul class="pagination">
+        {% if posts.has_prev %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="{{ url_for('blog', page=posts.prev_num, category=current_category) }}"
+            >Previous</a
+          >
+        </li>
+        {% endif %} {% for page_num in posts.iter_pages(left_edge=1,
+        right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
+        <li class="page-item {% if page_num == posts.page %}active{% endif %}">
+          <a
+            class="page-link"
+            href="{{ url_for('blog', page=page_num, category=current_category) }}"
+            >{{ page_num }}</a
+          >
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">...</span></li>
+        {% endif %} {% endfor %} {% if posts.has_next %}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="{{ url_for('blog', page=posts.next_num, category=current_category) }}"
+            >Next</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

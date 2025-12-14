@@ -1,0 +1,268 @@
+{% extends "public/base.html" %} {% block title %}Testimonials{% endblock %} {%
+block meta_description %}Real stories from farmers who have transformed their
+lives with Shramic Networks{% endblock %} {% block extra_css %}
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+    padding: 100px 0 80px;
+    text-align: center;
+    color: var(--white);
+  }
+
+  .page-header h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .stats-section {
+    background: var(--white);
+    padding: 60px 0;
+    margin-top: -40px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .stats-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, var(--secondary), #d35400);
+    color: var(--white);
+    padding: 35px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px var(--shadow);
+  }
+
+  .stat-number {
+    font-family: "Playfair Display", serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .testimonials-section {
+    padding: 80px 0;
+  }
+
+  .section-title {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 50px;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .testimonial-card {
+    background: var(--white);
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px var(--shadow);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    font-family: "Playfair Display", serif;
+    font-size: 120px;
+    color: var(--cream-dark);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px var(--shadow-lg);
+  }
+
+  .testimonial-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonial-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--cream-dark);
+  }
+
+  .testimonial-info h4 {
+    font-family: "Playfair Display", serif;
+    color: var(--primary);
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+  }
+
+  .testimonial-location {
+    color: var(--text-light);
+    font-size: 0.9rem;
+  }
+
+  .testimonial-rating {
+    color: var(--secondary);
+    margin-top: 5px;
+  }
+
+  .testimonial-text {
+    color: var(--text-dark);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonial-impact {
+    background: var(--cream-dark);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--secondary);
+    margin-top: 20px;
+  }
+
+  .impact-title {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .impact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .impact-list li {
+    padding: 5px 0;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+  }
+
+  .impact-list i {
+    color: var(--success);
+    margin-right: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .stats-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .testimonials-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .stats-container {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<header class="page-header">
+  <div class="container">
+    <h1>Success Stories</h1>
+    <p>Real farmers. Real results. Real transformation through technology.</p>
+  </div>
+</header>
+
+<!-- Statistics -->
+{% if stats %}
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-container">
+      {% for stat in stats %}
+      <div class="stat-card">
+        <div class="stat-number">{{ stat.value }}{{ stat.suffix or '' }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Testimonials -->
+<section class="testimonials-section">
+  <div class="container">
+    <h2 class="section-title">What Farmers Say About Us</h2>
+
+    {% if testimonials %}
+    <div class="testimonials-grid">
+      {% for testimonial in testimonials %}
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <img
+            class="testimonial-avatar"
+            src="{{ testimonial.avatar_url or 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop' }}"
+            alt="{{ testimonial.name }}"
+          />
+          <div class="testimonial-info">
+            <h4>{{ testimonial.name }}</h4>
+            <div class="testimonial-location">
+              <i class="fas fa-map-marker-alt"></i> {{ testimonial.location }}
+            </div>
+            <div class="testimonial-rating">
+              {% for i in range(testimonial.rating) %}★{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <p class="testimonial-text">{{ testimonial.testimonial }}</p>
+
+        {% if testimonial.yield_increase or testimonial.water_saved or
+        testimonial.income_increase %}
+        <div class="testimonial-impact">
+          <div class="impact-title">Key Results:</div>
+          <ul class="impact-list">
+            {% if testimonial.yield_increase %}
+            <li>
+              <i class="fas fa-check-circle"></i> {{ testimonial.yield_increase
+              }}
+            </li>
+            {% endif %} {% if testimonial.water_saved %}
+            <li>
+              <i class="fas fa-check-circle"></i> {{ testimonial.water_saved }}
+            </li>
+            {% endif %} {% if testimonial.income_increase %}
+            <li>
+              <i class="fas fa-check-circle"></i> {{ testimonial.income_increase
+              }}
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <p class="text-muted">No testimonials available yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
