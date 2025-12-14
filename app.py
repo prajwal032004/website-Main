@@ -15,24 +15,32 @@ import secrets
 # =============================================================================
 # FLASK APP CONFIGURATION
 # =============================================================================
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(32))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/cms.db'
+
+# Database Configuration - Support both SQLite (local) and PostgreSQL (production)
+database_url = os.environ.get('DATABASE_URL')
+
+if database_url:
+    # Production - PostgreSQL on Render
+    # Render provides DATABASE_URL starting with postgres://, but SQLAlchemy needs postgresql://
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # Development - SQLite
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    INSTANCE_DIR = os.path.join(BASE_DIR, 'instance')
+    os.makedirs(INSTANCE_DIR, exist_ok=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(INSTANCE_DIR, "cms.db")}'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 
 # Get absolute paths
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-INSTANCE_DIR = os.path.join(BASE_DIR, 'instance')
 UPLOAD_DIR = os.path.join(BASE_DIR, 'static', 'uploads')
-
-# Ensure folders exist
-os.makedirs(INSTANCE_DIR, exist_ok=True)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-# Update database URI to use absolute path
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(INSTANCE_DIR, "cms.db")}'
 
 db = SQLAlchemy(app)
 

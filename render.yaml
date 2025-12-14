@@ -17,13 +17,14 @@ services:
         generateValue: true
       - key: FLASK_ENV
         value: production
-    disk:
-      name: shramic-data
-      mountPath: /opt/render/project/src/instance
-      sizeGB: 1
-# Optional: If you want to add a PostgreSQL database instead of SQLite
-# databases:
-#   - name: shramic-db
-#     databaseName: shramic_cms
-#     user: shramic_user
-#     plan: free
+      - key: DATABASE_URL
+        fromDatabase:
+          name: shramic-db
+          property: connectionString
+
+# PostgreSQL Database (Free Tier)
+databases:
+  - name: shramic-db
+    databaseName: shramic_cms
+    user: shramic_user
+    plan: free
